@@ -1,4 +1,4 @@
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from "../hooks/useAuth";
 
 export function DashboardPage() {
   const { user, logout } = useAuth();
@@ -7,7 +7,7 @@ export function DashboardPage() {
     try {
       await logout();
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
@@ -21,7 +21,7 @@ export function DashboardPage() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700">
-                Welcome, {user?.username}!
+                Welcome, {user?.fullName}!
               </span>
               <button
                 onClick={handleLogout}
@@ -42,7 +42,9 @@ export function DashboardPage() {
               <h3 className="text-lg font-semibold mb-2">User Information</h3>
               <dl className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Username</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Username
+                  </dt>
                   <dd className="text-sm text-gray-900">{user?.username}</dd>
                 </div>
                 <div>
@@ -50,15 +52,21 @@ export function DashboardPage() {
                   <dd className="text-sm text-gray-900">{user?.email}</dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Email Verified</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Email Verified
+                  </dt>
                   <dd className="text-sm text-gray-900">
-                    {user?.isEmailVerified ? 'Yes' : 'No'}
+                    {user?.isEmailVerified ? "Yes" : "No"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Member Since</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Member Since
+                  </dt>
                   <dd className="text-sm text-gray-900">
-                    {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                    {user?.createdAt
+                      ? new Date(user.createdAt).toLocaleDateString()
+                      : "N/A"}
                   </dd>
                 </div>
               </dl>

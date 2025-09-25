@@ -4,10 +4,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { signupSchema, type SignupFormData } from "../schemas/auth";
+import { GoogleLoginButton } from "../components/GoogleLoginButton";
 
 export function SignupPage() {
   const [apiError, setApiError] = useState("");
-  const { signup } = useAuth();
+  const { signup, googleAuth } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -29,6 +30,24 @@ export function SignupPage() {
       setApiError(err.response?.data?.message || "Signup failed");
     }
   };
+
+  const handleGoogleSuccess = async (credential: string) => {
+    setApiError("");
+
+    try {
+      await googleAuth(credential);
+      navigate("/dashboard");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.detail || err.message || "Google sign-in failed";
+      setApiError(errorMessage);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setApiError("Google sign-in was cancelled or failed");
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -92,6 +111,22 @@ export function SignupPage() {
             >
               {isSubmitting ? "Creating account..." : "Sign up"}
             </button>
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-gray-50 text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div>
+            <GoogleLoginButton
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+            />
           </div>
 
           <div className="text-center">

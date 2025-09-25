@@ -46,6 +46,20 @@ export const authService = {
     return authData;
   },
 
+  googleAuth: async (googleToken: string): Promise<AuthResponse> => {
+    const response = await apiClient.post("/auth/google", {
+      google_token: googleToken
+    });
+    const authData = response.data;
+
+    // Store tokens in cookies on the frontend side
+    Cookies.set("access_token", authData.accessToken, { expires: 1/48 }); // 30 minutes
+    Cookies.set("refresh_token", authData.refreshToken, { expires: 7 }); // 7 days
+
+    return authData;
+  },
+
+
   logout: async (): Promise<void> => {
     await apiClient.post("/auth/logout");
   },

@@ -9,6 +9,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
+  googleAuth: (googleToken: string) => Promise<void>;
   logout: () => Promise<void>;
   refetchUser: () => Promise<void>;
 }
@@ -43,6 +44,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(response.user);
   };
 
+  const googleAuth = async (googleToken: string) => {
+    const response = await api.auth.googleAuth(googleToken);
+    setUser(response.user);
+  };
+
+
   const logout = async () => {
     try {
       await api.auth.logout();
@@ -72,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAuthenticated: !!user,
     login,
     signup,
+    googleAuth,
     logout,
     refetchUser,
   };
