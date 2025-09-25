@@ -4,8 +4,8 @@ from sqlalchemy import or_
 
 from ..database import get_db
 from ..models.user import User
-from .schemas import UserSignup, UserLogin, TokenResponse, UserResponse, MessageResponse
-from .utils import hash_password, verify_password, create_access_token, create_refresh_token, get_current_user
+from .schemas import UserSignup, UserLogin, TokenResponse, UserResponse, MessageResponse, GoogleAuthRequest
+from .utils import hash_password, verify_password, create_access_token, create_refresh_token, get_current_user, verify_google_token
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -149,3 +149,68 @@ async def refresh_token(request: dict, db: Session = Depends(get_db)):
 async def logout():
     """Logout user - frontend handles cookie clearing"""
     return MessageResponse(message="Successfully logged out")
+
+@router.post("/google", response_model=TokenResponse)
+async def google_auth(google_data: GoogleAuthRequest, db: Session = Depends(get_db)):
+    """Authenticate with Google OAuth token"""
+
+    # Verify Google token and get user info
+    google_user_info = await verify_google_token(google_data.google_token)
+
+    if not google_user_info:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid Google token"
+        )
+
+    # Check if user already exists by Google ID
+    user = db.query(User).filter(User.google_id == google_user_info["google_id"]).first()
+
+    if not user:
+        # Check if user exists by email
+        user = db.query(User).filter(User.email == google_user_info["email"]).first()
+
+        if user:
+            # Link Google account to existing user
+            user.google_id = google_user_info["google_id"]
+            if google_user_info["is_verified"]:
+                user.is_verified = True
+        else:
+            # Create new user
+            user = User(
+                email=google_user_info["email"],
+                google_id=google_user_info["google_id"],
+                first_name=google_user_info["first_name"],
+                last_name=google_user_info["last_name"],
+                is_verified=google_user_info["is_verified"],
+                password_hash=None  # No password for OAuth-only users
+            )
+            db.add(user)
+
+    # Update user info from Google (in case it changed)
+    if google_user_info["first_name"]:
+        user.first_name = google_user_info["first_name"]
+    if google_user_info["last_name"]:
+        user.last_name = google_user_info["last_name"]
+    if google_user_info["is_verified"]:
+        user.is_verified = True
+
+    db.commit()
+    db.refresh(user)
+
+    # Check if user is active
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Account is deactivated"
+        )
+
+    # Create tokens
+    access_token = create_access_token(data={"sub": str(user.id)})
+    refresh_token = create_refresh_token(data={"sub": str(user.id)})
+
+    return TokenResponse(
+        accessToken=access_token,
+        refreshToken=refresh_token,
+        user=UserResponse(**user.to_dict())
+    )

@@ -1,11 +1,14 @@
 import os
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Dict
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
+import httpx
+import hashlib
+import re
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -90,3 +93,37 @@ def get_current_user_dependency():
 
 # Create the dependency
 get_current_user = get_current_user_dependency()
+
+# Google OAuth settings
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo"
+
+async def verify_google_token(credential: str) -> Optional[Dict]:
+    """Verify Google OAuth JWT credential and return user info"""
+    try:
+        # Use Google's tokeninfo endpoint to verify the JWT credential
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={credential}"
+            )
+
+            if response.status_code == 200:
+                user_data = response.json()
+
+                # Verify the token is for our app
+                if user_data.get("aud") != GOOGLE_CLIENT_ID:
+                    print(f"Token audience mismatch: {user_data.get('aud')} != {GOOGLE_CLIENT_ID}")
+                    return None
+
+                return {
+                    "google_id": user_data.get("sub"),  # 'sub' is the user ID in JWT
+                    "email": user_data.get("email"),
+                    "first_name": user_data.get("given_name"),
+                    "last_name": user_data.get("family_name"),
+                    "is_verified": user_data.get("email_verified", False)
+                }
+    except Exception as e:
+        print(f"Google token verification error: {e}")
+
+    return None

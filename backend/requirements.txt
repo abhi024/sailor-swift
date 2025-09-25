@@ -17,6 +17,7 @@ python-decouple==3.8
 # OAuth
 authlib==1.2.1
 httpx==0.25.2
+requests==2.31.0
 
 # CORS for frontend communication
 fastapi-cors==0.0.6
