@@ -33,6 +33,7 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
     depends_on:
       - database
     volumes:
@@ -40,7 +41,7 @@ services:
     networks:
       - sailor-swift-network
 
-  # React Frontend Service
+  # React Frontend Service (Vite)
   frontend:
     build:
       context: ./frontend
@@ -48,10 +49,10 @@ services:
     container_name: sailor-swift-frontend
     restart: always
     ports:
-      - "3000:3000"
+      - "5173:5173"
     environment:
-      - REACT_APP_API_URL=http://localhost:8000
-      - REACT_APP_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
     depends_on:
       - backend
     volumes:

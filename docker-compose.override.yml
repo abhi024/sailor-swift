@@ -1,0 +1,13 @@
+# Development overrides for docker-compose.yml
+# This file is automatically loaded by Docker Compose in development
+
+services:
+  frontend:
+    # Override the CMD to install packages at runtime in development
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+
+  # You can add other development-specific overrides here
+  # backend:
+  #   volumes:
+  #     - ./backend:/app
+  #   command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

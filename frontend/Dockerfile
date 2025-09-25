@@ -1,5 +1,5 @@
-# Use Node.js 18 Alpine as base image
-FROM node:18-alpine
+# Use Node.js 20 Alpine as base image
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
@@ -13,8 +13,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Expose port 3000 for React dev server
-EXPOSE 3000
+# Expose port 5173 for Vite dev server (default Vite port)
+EXPOSE 5173
 
-# Start the React development server
-CMD ["npm", "start"]
+# Start the Vite development server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
