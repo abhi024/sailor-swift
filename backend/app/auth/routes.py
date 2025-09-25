@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
@@ -10,7 +10,7 @@ from .utils import hash_password, verify_password, create_access_token, create_r
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/signup", response_model=TokenResponse)
-async def signup(user_data: UserSignup, db: Session = Depends(get_db)):
+async def signup(user_data: UserSignup, response: Response, db: Session = Depends(get_db)):
     """Register a new user with email and password"""
 
     # Check if user already exists
@@ -49,6 +49,7 @@ async def signup(user_data: UserSignup, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": str(new_user.id)})
     refresh_token = create_refresh_token(data={"sub": str(new_user.id)})
 
+
     return TokenResponse(
         accessToken=access_token,
         refreshToken=refresh_token,
@@ -56,7 +57,7 @@ async def signup(user_data: UserSignup, db: Session = Depends(get_db)):
     )
 
 @router.post("/login", response_model=TokenResponse)
-async def login(login_data: UserLogin, db: Session = Depends(get_db)):
+async def login(login_data: UserLogin, response: Response, db: Session = Depends(get_db)):
     """Login with email and password"""
 
     # Find user by email
@@ -86,6 +87,7 @@ async def login(login_data: UserLogin, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": str(user.id)})
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
 
+
     return TokenResponse(
         accessToken=access_token,
         refreshToken=refresh_token,
@@ -96,3 +98,54 @@ async def login(login_data: UserLogin, db: Session = Depends(get_db)):
 async def get_current_user(current_user: User = Depends(get_current_user)):
     """Get current user information"""
     return UserResponse(**current_user.to_dict())
+
+@router.post("/refresh", response_model=TokenResponse)
+async def refresh_token(request: dict, db: Session = Depends(get_db)):
+    """Refresh access token using refresh token"""
+    from .utils import verify_token
+
+    try:
+        # Get refresh token from request body
+        refresh_token = request.get("refresh_token")
+        if not refresh_token:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Refresh token is required"
+            )
+
+        # Verify refresh token and extract user ID
+        user_id = verify_token(refresh_token)
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid refresh token"
+            )
+
+        # Get user from database
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user or not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User not found or inactive"
+            )
+
+        # Create new tokens
+        new_access_token = create_access_token(data={"sub": str(user.id)})
+        new_refresh_token = create_refresh_token(data={"sub": str(user.id)})
+
+        return TokenResponse(
+            accessToken=new_access_token,
+            refreshToken=new_refresh_token,
+            user=UserResponse(**user.to_dict())
+        )
+
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token"
+        )
+
+@router.post("/logout", response_model=MessageResponse)
+async def logout():
+    """Logout user - frontend handles cookie clearing"""
+    return MessageResponse(message="Successfully logged out")
