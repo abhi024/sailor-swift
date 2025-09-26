@@ -1,6 +1,9 @@
 # Use Node.js 20 Alpine as base image
 FROM node:20-alpine
 
+# Install Python and build tools for native dependencies
+RUN apk add --no-cache python3 py3-pip make g++
+
 # Set working directory
 WORKDIR /app
 

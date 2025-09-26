@@ -53,6 +53,7 @@ services:
     environment:
       - VITE_API_URL=${VITE_API_URL}
       - VITE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - VITE_WALLETCONNECT_PROJECT_ID=${VITE_WALLETCONNECT_PROJECT_ID}
     depends_on:
       - backend
     volumes:
