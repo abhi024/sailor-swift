@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
+import { useDisconnect } from "wagmi";
 import { type User } from "../types/auth";
 import { api } from "../services/client";
 import Cookies from "js-cookie";
@@ -10,6 +11,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   googleAuth: (googleToken: string) => Promise<void>;
+  walletAuth: (walletAddress: string) => Promise<void>;
   logout: () => Promise<void>;
   refetchUser: () => Promise<void>;
 }
@@ -22,6 +24,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { disconnectAsync } = useDisconnect();
 
   const fetchUser = async () => {
     try {
@@ -49,9 +52,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(response.user);
   };
 
+  const walletAuth = async (walletAddress: string) => {
+    const response = await api.auth.walletAuth(walletAddress);
+    setUser(response.user);
+  };
+
 
   const logout = async () => {
     try {
+      // Disconnect wallet and wait for completion
+      await disconnectAsync();
+
+      // Call backend logout
       await api.auth.logout();
     } catch (error) {
       // Even if backend call fails, clear frontend state
@@ -80,6 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     signup,
     googleAuth,
+    walletAuth,
     logout,
     refetchUser,
   };

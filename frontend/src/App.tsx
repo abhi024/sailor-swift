@@ -5,39 +5,20 @@ import {
   Navigate,
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { WagmiProvider } from "wagmi";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
-import { useAuth } from "./hooks/useAuth";
 import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SignupPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { PublicRoute } from "./components/PublicRoute";
+import { wagmiConfig } from "./config/wagmi";
+import { ROUTES } from "./constants/routes";
+import "@rainbow-me/rainbowkit/styles.css";
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
-      </div>
-    );
-  }
-
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
-}
-
-function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
-      </div>
-    );
-  }
-
-  return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" />;
-}
+const queryClient = new QueryClient();
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -47,39 +28,45 @@ function App() {
   }
 
   return (
-    <GoogleOAuthProvider clientId={clientId || ""}>
-      <Router>
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route
-              path="/login"
-              element={
-                <PublicRoute>
-                  <LoginPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <PublicRoute>
-                  <SignupPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </AuthProvider>
-      </Router>
-    </GoogleOAuthProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <GoogleOAuthProvider clientId={clientId || ""}>
+            <Router>
+              <AuthProvider>
+                <Routes>
+                  <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} />} />
+                  <Route
+                    path={ROUTES.LOGIN}
+                    element={
+                      <PublicRoute>
+                        <LoginPage />
+                      </PublicRoute>
+                    }
+                  />
+                  <Route
+                    path={ROUTES.SIGNUP}
+                    element={
+                      <PublicRoute>
+                        <SignupPage />
+                      </PublicRoute>
+                    }
+                  />
+                  <Route
+                    path={ROUTES.DASHBOARD}
+                    element={
+                      <ProtectedRoute>
+                        <DashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </AuthProvider>
+            </Router>
+          </GoogleOAuthProvider>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 
