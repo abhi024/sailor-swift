@@ -3,15 +3,11 @@ import { GoogleLogin } from "@react-oauth/google";
 interface GoogleLoginButtonProps {
   onSuccess: (credential: string) => void;
   onError: () => void;
-  size?: "large" | "medium" | "small";
-  width?: string;
 }
 
 export function GoogleLoginButton({
   onSuccess,
   onError,
-  size = "large",
-  width = "100%",
 }: GoogleLoginButtonProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSuccess = (credentialResponse: any) => {
@@ -28,8 +24,11 @@ export function GoogleLoginButton({
         onSuccess={handleSuccess}
         onError={onError}
         useOneTap={false}
-        size={size}
-        width={width}
+        theme="outline"
+        text="continue_with"
+        shape="pill"
+        size="large"
+        width="100%"
       />
     </div>
   );
