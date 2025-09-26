@@ -1,15 +1,21 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 import { loginSchema, type LoginFormData } from "../schemas/auth";
 import { GoogleLoginButton } from "../components/GoogleLoginButton";
+import { WalletConnectButton } from "../components/WalletConnectButton";
+import { useAuthHandlers } from "../hooks/useAuthHandlers";
+import { Button } from "../components/ui/button";
 
 export function LoginPage() {
-  const [apiError, setApiError] = useState("");
-  const { login, googleAuth } = useAuth();
-  const navigate = useNavigate();
+  const {
+    apiError,
+    handleEmailSubmit,
+    handleGoogleSuccess,
+    handleGoogleError,
+    handleWalletSuccess,
+    handleWalletError,
+  } = useAuthHandlers();
 
   const {
     register,
@@ -20,37 +26,11 @@ export function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    setApiError("");
-
-    try {
-      await login(data.email, data.password);
-      navigate("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setApiError(err.response?.data?.message || "Login failed");
-    }
+    await handleEmailSubmit(data, false);
   };
-
-  const handleGoogleSuccess = async (credential: string) => {
-    setApiError("");
-
-    try {
-      await googleAuth(credential);
-      navigate("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.detail || err.message || "Google sign-in failed";
-      setApiError(errorMessage);
-    }
-  };
-
-  const handleGoogleError = () => {
-    setApiError("Google sign-in was cancelled or failed");
-  };
-
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full space-y-8 p-8">
         <div>
           <h2 className="text-center text-3xl font-bold text-gray-900">
@@ -104,13 +84,14 @@ export function LoginPage() {
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="w-full"
+              size="lg"
             >
               {isSubmitting ? "Signing in..." : "Sign in"}
-            </button>
+            </Button>
           </div>
 
           <div className="relative">
@@ -124,10 +105,15 @@ export function LoginPage() {
             </div>
           </div>
 
-          <div>
+          <div className="space-y-3">
             <GoogleLoginButton
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleError}
+            />
+
+            <WalletConnectButton
+              onSuccess={handleWalletSuccess}
+              onError={handleWalletError}
             />
           </div>
 

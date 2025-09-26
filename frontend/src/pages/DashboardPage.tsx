@@ -1,4 +1,5 @@
 import { useAuth } from "../hooks/useAuth";
+import { Button } from "../components/ui/button";
 
 export function DashboardPage() {
   const { user, logout } = useAuth();
@@ -23,12 +24,13 @@ export function DashboardPage() {
               <span className="text-sm text-gray-700">
                 Welcome, {user?.fullName}!
               </span>
-              <button
+              <Button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                variant="destructive"
+                size="sm"
               >
                 Logout
-              </button>
+              </Button>
             </div>
           </div>
         </div>
