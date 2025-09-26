@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 import httpx
 import hashlib
 import re
+from eth_account.messages import encode_defunct
+from eth_account import Account
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -127,3 +129,22 @@ async def verify_google_token(credential: str) -> Optional[Dict]:
         print(f"Google token verification error: {e}")
 
     return None
+
+def verify_wallet_signature(wallet_address: str, message: str, signature: str) -> bool:
+    """Verify Ethereum wallet signature"""
+    try:
+        # Create the message hash that was signed
+        message_hash = encode_defunct(text=message)
+
+        # Recover the address from signature
+        recovered_address = Account.recover_message(message_hash, signature=signature)
+
+        # Compare recovered address with claimed address (case insensitive)
+        return recovered_address.lower() == wallet_address.lower()
+    except Exception as e:
+        print(f"Wallet signature verification error: {e}")
+        return False
+
+def generate_wallet_auth_message(nonce: str) -> str:
+    """Generate a message for wallet authentication"""
+    return f"Sign this message to authenticate with Sailor Swift: {nonce}"

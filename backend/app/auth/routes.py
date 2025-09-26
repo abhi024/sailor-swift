@@ -4,8 +4,8 @@ from sqlalchemy import or_
 
 from ..database import get_db
 from ..models.user import User
-from .schemas import UserSignup, UserLogin, TokenResponse, UserResponse, MessageResponse, GoogleAuthRequest
-from .utils import hash_password, verify_password, create_access_token, create_refresh_token, get_current_user, verify_google_token
+from .schemas import UserSignup, UserLogin, TokenResponse, UserResponse, MessageResponse, GoogleAuthRequest, WalletConnectRequest
+from .utils import hash_password, verify_password, create_access_token, create_refresh_token, get_current_user, verify_google_token, verify_wallet_signature, generate_wallet_auth_message
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -15,20 +15,14 @@ async def signup(user_data: UserSignup, response: Response, db: Session = Depend
 
     # Check if user already exists
     existing_user = db.query(User).filter(
-        or_(User.email == user_data.email, User.username == user_data.username)
+        User.email == user_data.email
     ).first()
 
     if existing_user:
-        if existing_user.email == user_data.email:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already registered"
-            )
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Username already taken"
-            )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered"
+        )
 
     # Create new user
     hashed_password = hash_password(user_data.password)
@@ -171,10 +165,11 @@ async def google_auth(google_data: GoogleAuthRequest, db: Session = Depends(get_
         user = db.query(User).filter(User.email == google_user_info["email"]).first()
 
         if user:
-            # Link Google account to existing user
+            # Link Google account to existing user (preserve existing password)
             user.google_id = google_user_info["google_id"]
             if google_user_info["is_verified"]:
                 user.is_verified = True
+            # Don't modify password_hash - keep existing password for email login
         else:
             # Create new user
             user = User(
@@ -197,6 +192,51 @@ async def google_auth(google_data: GoogleAuthRequest, db: Session = Depends(get_
 
     db.commit()
     db.refresh(user)
+
+    # Check if user is active
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Account is deactivated"
+        )
+
+    # Create tokens
+    access_token = create_access_token(data={"sub": str(user.id)})
+    refresh_token = create_refresh_token(data={"sub": str(user.id)})
+
+    return TokenResponse(
+        accessToken=access_token,
+        refreshToken=refresh_token,
+        user=UserResponse(**user.to_dict())
+    )
+
+@router.post("/wallet", response_model=TokenResponse)
+async def wallet_auth(wallet_data: dict, db: Session = Depends(get_db)):
+    """Authenticate with wallet address - auto-create account if new"""
+
+    wallet_address = wallet_data.get("wallet_address")
+    if not wallet_address:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Wallet address is required"
+        )
+
+    # Check if user already exists by wallet address
+    user = db.query(User).filter(User.wallet_address == wallet_address.lower()).first()
+
+    if not user:
+        # Create new user with wallet address
+        user = User(
+            email=f"{wallet_address.lower()}@wallet.local",  # Placeholder email
+            wallet_address=wallet_address.lower(),
+            first_name=None,
+            last_name=None,
+            is_verified=True,  # Wallet connection is considered verification
+            password_hash=None  # No password for wallet-only users
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
     # Check if user is active
     if not user.is_active:
