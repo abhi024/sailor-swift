@@ -9,10 +9,15 @@ A modern full-stack authentication application built with React TypeScript, Fast
   - Google OAuth integration
   - WalletConnect (Web3 wallet authentication)
 - 🚀 **Modern Tech Stack**
-  - React 18 with TypeScript
+  - React 19 with TypeScript
   - FastAPI with SQLAlchemy ORM
   - PostgreSQL database
   - Docker containerization
+- 🎨 **Enhanced UI/UX**
+  - Comprehensive component library
+  - Tailwind CSS v4 for styling
+  - Route protection and loading states
+  - Consistent iconography with Lucide React
 - 🔒 **Security First**
   - JWT access and refresh tokens
   - Bcrypt password hashing
@@ -32,9 +37,14 @@ sailor-swift/
 │   └── requirements.txt
 ├── frontend/          # React TypeScript application
 │   ├── src/
-│   │   ├── components/ # React components
+│   │   ├── components/ # React components and UI library
+│   │   ├── pages/      # Application pages
+│   │   ├── contexts/   # React context providers
+│   │   ├── hooks/      # Custom React hooks
 │   │   ├── services/   # API service layer
-│   │   └── types/      # TypeScript type definitions
+│   │   ├── lib/        # Utility functions
+│   │   ├── config/     # Configuration files
+│   │   └── constants/  # Application constants
 │   └── Dockerfile
 ├── database/          # PostgreSQL initialization
 │   └── init.sql       # Database schema and seed data
@@ -74,6 +84,8 @@ POSTGRES_USER=your-database-user
 POSTGRES_PASSWORD=your-secure-password
 GOOGLE_CLIENT_ID=your-google-oauth-id
 GOOGLE_CLIENT_SECRET=your-google-oauth-secret
+VITE_GOOGLE_CLIENT_ID=your-google-oauth-id
+VITE_API_URL=http://localhost:8000
 WALLETCONNECT_PROJECT_ID=your-walletconnect-id
 ```
 
@@ -89,10 +101,11 @@ docker compose logs -f
 
 ### 4. Access the Application
 
-- **API Documentation**: http://localhost:8000/docs
+- **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
 - **Database**: localhost:5432
-- **Frontend** (when implemented): http://localhost:3000
+- **Database Admin** (Adminer): http://localhost:8080
 
 ## API Endpoints
 
@@ -102,6 +115,10 @@ docker compose logs -f
 |--------|----------|-------------|
 | POST   | `/auth/signup` | Register new user |
 | POST   | `/auth/login`  | User login |
+| POST   | `/auth/google` | Google OAuth authentication |
+| POST   | `/auth/wallet` | Web3 wallet authentication |
+| POST   | `/auth/refresh` | Refresh access token |
+| POST   | `/auth/logout` | User logout |
 | GET    | `/auth/me`     | Get current user profile |
 
 ### Example Requests
@@ -180,11 +197,15 @@ docker compose exec database psql -U <username> -d <database>
 - **Bcrypt**: Password hashing
 - **PostgreSQL**: Database
 
-### Frontend (Planned)
-- **React 18**: UI library
+### Frontend
+- **React 19**: UI library
 - **TypeScript**: Type safety
 - **Vite**: Build tool
-- **Tailwind CSS**: Styling
+- **Tailwind CSS v4**: Styling
+- **React Hook Form**: Form handling
+- **Zod**: Schema validation
+- **Lucide React**: Icons
+- **Class Variance Authority**: Component variants
 
 ### Infrastructure
 - **Docker**: Containerization
@@ -208,19 +229,25 @@ docker compose exec database psql -U <username> -d <database>
 | `POSTGRES_DB` | Database name | Yes |
 | `POSTGRES_USER` | Database username | Yes |
 | `POSTGRES_PASSWORD` | Database password | Yes |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID | No* |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth secret | No* |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID (backend) | No* |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth secret (backend) | No* |
+| `VITE_GOOGLE_CLIENT_ID` | Google OAuth client ID (frontend) | No* |
+| `VITE_API_URL` | Backend API URL | No** |
 | `WALLETCONNECT_PROJECT_ID` | WalletConnect project ID | No* |
 
 *Required for respective authentication methods
+**Defaults to http://localhost:8000
 
 ## Security
 
 - Environment variables are never committed (see `.gitignore`)
-- Passwords are hashed using bcrypt
-- JWT tokens have configurable expiration
-- CORS is configured for frontend domain
+- Passwords are hashed using bcrypt 4.0.1 (compatibility tested)
+- JWT tokens with automatic refresh mechanism
+- CORS configured for frontend domain
 - Database uses non-root user
+- Route protection with authentication guards
+- Google OAuth token verification
+- Secure cookie-based token storage
 
 ## License
 
