@@ -7,7 +7,10 @@ export function useAuthHandlers() {
   const { login, signup, googleAuth, walletAuth } = useAuth();
   const navigate = useNavigate();
 
-  const handleEmailSubmit = async (data: { email: string; password: string }, isSignup: boolean) => {
+  const handleEmailSubmit = async (
+    data: { email: string; password: string },
+    isSignup: boolean
+  ) => {
     setApiError("");
 
     try {
@@ -17,9 +20,8 @@ export function useAuthHandlers() {
         await login(data.email, data.password);
       }
       navigate("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || (isSignup ? "Signup failed" : "Login failed");
+    } catch {
+      const errorMessage = isSignup ? "Signup failed" : "Login failed";
       setApiError(errorMessage);
     }
   };
@@ -30,9 +32,8 @@ export function useAuthHandlers() {
     try {
       await googleAuth(credential);
       navigate("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.detail || err.message || "Google sign-in failed";
+    } catch {
+      const errorMessage = "Google sign-in failed";
       setApiError(errorMessage);
     }
   };
@@ -47,9 +48,8 @@ export function useAuthHandlers() {
     try {
       await walletAuth(address);
       navigate("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.detail || err.message || "Wallet authentication failed";
+    } catch {
+      const errorMessage = "Wallet authentication failed";
       setApiError(errorMessage);
     }
   };

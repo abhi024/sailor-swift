@@ -29,6 +29,8 @@ export function LoginPage() {
     await handleEmailSubmit(data, false);
   };
 
+  console.log(errors);
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full space-y-8 p-8">
@@ -54,6 +56,7 @@ export function LoginPage() {
             </label>
             <input
               {...register("email")}
+              id="email"
               type="email"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -73,6 +76,7 @@ export function LoginPage() {
             </label>
             <input
               {...register("password")}
+              id="password"
               type="password"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
