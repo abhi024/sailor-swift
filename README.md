@@ -23,6 +23,11 @@ A modern full-stack authentication application built with React TypeScript, Fast
   - Bcrypt password hashing
   - Environment-based configuration
   - CORS protection
+- 🧪 **Comprehensive Testing**
+  - Backend unit tests with pytest (12 tests) ✅
+  - Frontend unit tests with Vitest (44 tests) ✅
+  - E2E test framework with Playwright (19 tests) ⚠️
+  - Complete unit test coverage for authentication flows
 
 ## Architecture
 
@@ -33,6 +38,7 @@ sailor-swift/
 │   │   ├── auth/      # Authentication routes and utilities
 │   │   ├── models/    # SQLAlchemy database models
 │   │   └── main.py    # FastAPI application entry point
+│   ├── tests/         # Backend unit tests (pytest)
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── frontend/          # React TypeScript application
@@ -42,12 +48,15 @@ sailor-swift/
 │   │   ├── contexts/   # React context providers
 │   │   ├── hooks/      # Custom React hooks
 │   │   ├── services/   # API service layer
+│   │   ├── test/       # Test utilities and setup
 │   │   ├── lib/        # Utility functions
 │   │   ├── config/     # Configuration files
 │   │   └── constants/  # Application constants
+│   ├── tests/         # E2E tests (Playwright)
 │   └── Dockerfile
 ├── database/          # PostgreSQL initialization
 │   └── init.sql       # Database schema and seed data
+├── TESTING.md         # Testing documentation
 └── docker-compose.yml # Multi-service orchestration
 ```
 
@@ -106,6 +115,34 @@ docker compose logs -f
 - **API Documentation**: http://localhost:8000/docs
 - **Database**: localhost:5432
 - **Database Admin** (Adminer): http://localhost:8080
+
+## Testing
+
+Comprehensive testing suite covering backend, frontend, and end-to-end scenarios.
+
+### Quick Test Commands
+
+```bash
+# Run all backend tests
+cd backend && python -m pytest
+
+# Run all frontend tests
+cd frontend && npm test
+
+# Run specific test files
+cd frontend && npm test -- src/components/ui/__tests__/button.test.tsx
+
+# Run E2E tests (requires running application)
+cd frontend && npx playwright test
+```
+
+### Test Coverage
+
+- **Backend**: 12 tests covering authentication routes, user models, and API endpoints ✅
+- **Frontend**: 44 tests covering UI components, services, contexts, and pages ✅
+- **E2E**: 19 tests written for complete authentication flows (require UI updates to pass) ⚠️
+
+For detailed testing instructions, see [TESTING.md](./TESTING.md).
 
 ## API Endpoints
 
@@ -207,6 +244,12 @@ docker compose exec database psql -U <username> -d <database>
 - **Lucide React**: Icons
 - **Class Variance Authority**: Component variants
 
+### Testing
+- **pytest**: Backend unit testing
+- **Vitest**: Frontend unit testing with React Testing Library
+- **Playwright**: End-to-end testing across multiple browsers
+- **React Testing Library**: Component testing utilities
+
 ### Infrastructure
 - **Docker**: Containerization
 - **Docker Compose**: Multi-service orchestration
@@ -217,7 +260,14 @@ docker compose exec database psql -U <username> -d <database>
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run tests (when implemented)
+4. Run tests to ensure quality
+   ```bash
+   # Backend tests
+   cd backend && python -m pytest
+
+   # Frontend tests
+   cd frontend && npm test
+   ```
 5. Submit a pull request
 
 ## Environment Variables

@@ -195,6 +195,8 @@ E2E tests use **Playwright** for full browser automation:
 - Automatic server startup/shutdown
 - Screenshots and traces on failure
 
+> ⚠️ **Current Status**: E2E tests are implemented but require UI updates to pass. Tests expect `data-testid` attributes and specific text content that don't match the current component implementation.
+
 ### Running E2E Tests
 
 ```bash
