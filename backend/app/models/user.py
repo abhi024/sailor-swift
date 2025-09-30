@@ -44,7 +44,9 @@ class User(Base):
             "firstName": self.first_name,
             "lastName": self.last_name,
             "fullName": self.full_name,
+            "walletAddress": self.wallet_address,
             "isActive": self.is_active,
             "isVerified": self.is_verified,
             "createdAt": self.created_at.isoformat() if self.created_at else None,
+            "updatedAt": self.updated_at.isoformat() if self.updated_at else None,
         }

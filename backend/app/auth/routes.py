@@ -4,7 +4,7 @@ from sqlalchemy import or_
 
 from ..database import get_db
 from ..models.user import User
-from .schemas import UserSignup, UserLogin, TokenResponse, UserResponse, MessageResponse, GoogleAuthRequest, WalletConnectRequest
+from .schemas import UserSignup, UserLogin, TokenResponse, UserResponse, MessageResponse, RefreshTokenRequest, GoogleAuthRequest, WalletConnectRequest
 from .utils import hash_password, verify_password, create_access_token, create_refresh_token, get_current_user, verify_google_token, verify_wallet_signature, generate_wallet_auth_message
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -29,8 +29,8 @@ async def signup(user_data: UserSignup, response: Response, db: Session = Depend
     new_user = User(
         email=user_data.email,
         username=user_data.username,
-        first_name=user_data.first_name,
-        last_name=user_data.last_name,
+        first_name=user_data.firstName,
+        last_name=user_data.lastName,
         password_hash=hashed_password,
         is_verified=False  # Email verification can be added later
     )
@@ -94,13 +94,13 @@ async def get_current_user(current_user: User = Depends(get_current_user)):
     return UserResponse(**current_user.to_dict())
 
 @router.post("/refresh", response_model=TokenResponse)
-async def refresh_token(request: dict, db: Session = Depends(get_db)):
+async def refresh_token(request: RefreshTokenRequest, db: Session = Depends(get_db)):
     """Refresh access token using refresh token"""
     from .utils import verify_token
 
     try:
         # Get refresh token from request body
-        refresh_token = request.get("refresh_token")
+        refresh_token = request.refreshToken
         if not refresh_token:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

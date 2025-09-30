@@ -7,8 +7,8 @@ class UserSignup(BaseModel):
     email: EmailStr
     password: str
     username: Optional[str] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
+    firstName: Optional[str] = None
+    lastName: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -30,9 +30,11 @@ class UserResponse(BaseModel):
     firstName: Optional[str]
     lastName: Optional[str]
     fullName: str
+    walletAddress: Optional[str]
     isActive: bool
     isVerified: bool
     createdAt: Optional[datetime]
+    updatedAt: Optional[datetime]
 
     class Config:
         from_attributes = True  # Allows conversion from SQLAlchemy models
