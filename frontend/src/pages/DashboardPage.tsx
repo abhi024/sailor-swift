@@ -21,13 +21,14 @@ export function DashboardPage() {
               <h1 className="text-xl font-semibold">Sailor Swift</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">
+              <span data-testid="user-welcome" className="text-sm text-gray-700">
                 Welcome, {user?.fullName}!
               </span>
               <Button
                 onClick={handleLogout}
                 variant="destructive"
                 size="sm"
+                data-testid="logout-button"
               >
                 Logout
               </Button>
@@ -45,13 +46,19 @@ export function DashboardPage() {
               <dl className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
                 <div>
                   <dt className="text-sm font-medium text-gray-500">
+                    Name
+                  </dt>
+                  <dd data-testid="user-name" className="text-sm text-gray-900">{user?.fullName}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-gray-500">
                     Username
                   </dt>
-                  <dd className="text-sm text-gray-900">{user?.username}</dd>
+                  <dd data-testid="user-username" className="text-sm text-gray-900">{user?.username}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Email</dt>
-                  <dd className="text-sm text-gray-900">{user?.email}</dd>
+                  <dd data-testid="user-email" className="text-sm text-gray-900">{user?.email}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-gray-500">

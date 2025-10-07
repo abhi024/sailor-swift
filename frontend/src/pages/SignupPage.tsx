@@ -40,7 +40,10 @@ export function SignupPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {apiError && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div
+              data-testid="error-message"
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"
+            >
               {apiError}
             </div>
           )}
@@ -55,10 +58,11 @@ export function SignupPage() {
             <input
               {...register("email")}
               type="email"
+              data-testid="email-input"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-600">
+              <p data-testid="email-error" className="mt-1 text-sm text-red-600">
                 {errors.email.message}
               </p>
             )}
@@ -74,10 +78,11 @@ export function SignupPage() {
             <input
               {...register("password")}
               type="password"
+              data-testid="password-input"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
             {errors.password && (
-              <p className="mt-1 text-sm text-red-600">
+              <p data-testid="password-error" className="mt-1 text-sm text-red-600">
                 {errors.password.message}
               </p>
             )}
@@ -89,6 +94,7 @@ export function SignupPage() {
               disabled={isSubmitting}
               className="w-full"
               size="lg"
+              data-testid="signup-button"
             >
               {isSubmitting ? "Creating account..." : "Sign up"}
             </Button>
@@ -122,6 +128,7 @@ export function SignupPage() {
               Already have an account?{" "}
               <Link
                 to="/login"
+                data-testid="login-link"
                 className="text-indigo-600 hover:text-indigo-500"
               >
                 Sign in
