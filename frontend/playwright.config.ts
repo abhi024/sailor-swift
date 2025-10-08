@@ -41,7 +41,8 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: [
+  // In CI, servers are already running, so don't start them again
+  webServer: process.env.CI ? undefined : [
     {
       command: 'docker compose up -d',
       cwd: '../',
