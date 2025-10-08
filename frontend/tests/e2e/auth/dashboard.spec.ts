@@ -1,8 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Dashboard Page", () => {
-  // No beforeEach needed - cookies cleared in global setup
-
+  test.beforeEach(async ({ context }) => {
+    await context.clearCookies();
+  });
 
   test("should maintain session across page refreshes", async ({ page }) => {
     // Signup

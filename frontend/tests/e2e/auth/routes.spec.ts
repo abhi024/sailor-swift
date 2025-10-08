@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Route Access Control", () => {
+  test.beforeEach(async ({ context }) => {
+    await context.clearCookies();
+  });
+
   test("should allow access to public routes when not authenticated", async ({
     page,
   }) => {
