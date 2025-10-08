@@ -46,12 +46,12 @@ export default defineConfig({
       command: 'docker compose up -d',
       cwd: '../',
       port: 8000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
     },
     {
       command: 'npm run dev',
       port: 5173,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
     },
   ],
 })
