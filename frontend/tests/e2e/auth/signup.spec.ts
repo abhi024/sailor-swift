@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Signup Page", () => {
   test.beforeEach(async ({ page }) => {
-    await page.context().clearCookies();
     await page.goto("/signup");
   });
 
