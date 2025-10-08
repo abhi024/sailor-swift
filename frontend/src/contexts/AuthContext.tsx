@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { useDisconnect } from "wagmi";
-import { type User } from "../types/auth";
+import { type AuthResponse, type User } from "../types/auth";
 import { api } from "../services/client";
 import Cookies from "js-cookie";
 
@@ -8,10 +8,10 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string) => Promise<void>;
-  googleAuth: (googleToken: string) => Promise<void>;
-  walletAuth: (walletAddress: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthResponse>;
+  signup: (email: string, password: string) => Promise<AuthResponse>;
+  googleAuth: (googleToken: string) => Promise<AuthResponse>;
+  walletAuth: (walletAddress: string) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   refetchUser: () => Promise<void>;
 }
@@ -40,23 +40,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const response = await api.auth.login({ email, password });
     setUser(response.user);
+
+    return response;
   };
 
   const signup = async (email: string, password: string) => {
     const response = await api.auth.signup({ email, password });
     setUser(response.user);
+
+    return response;
   };
 
   const googleAuth = async (googleToken: string) => {
     const response = await api.auth.googleAuth(googleToken);
     setUser(response.user);
+
+    return response;
   };
 
   const walletAuth = async (walletAddress: string) => {
     const response = await api.auth.walletAuth(walletAddress);
     setUser(response.user);
-  };
 
+    return response;
+  };
 
   const logout = async () => {
     try {

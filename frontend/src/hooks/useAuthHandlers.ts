@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
+import { ROUTES } from "../constants/routes";
 
 export function useAuthHandlers() {
   const [apiError, setApiError] = useState("");
@@ -14,12 +15,16 @@ export function useAuthHandlers() {
     setApiError("");
 
     try {
+      let response;
       if (isSignup) {
-        await signup(data.email, data.password);
+        response = await signup(data.email, data.password);
       } else {
-        await login(data.email, data.password);
+        response = await login(data.email, data.password);
       }
-      navigate("/dashboard");
+
+      if (response.user) {
+        navigate(ROUTES.DASHBOARD);
+      }
     } catch {
       const errorMessage = isSignup ? "Signup failed" : "Login failed";
       setApiError(errorMessage);
@@ -30,8 +35,11 @@ export function useAuthHandlers() {
     setApiError("");
 
     try {
-      await googleAuth(credential);
-      navigate("/dashboard");
+      const response = await googleAuth(credential);
+
+      if (response.user) {
+        navigate(ROUTES.DASHBOARD);
+      }
     } catch {
       const errorMessage = "Google sign-in failed";
       setApiError(errorMessage);
@@ -46,8 +54,11 @@ export function useAuthHandlers() {
     setApiError("");
 
     try {
-      await walletAuth(address);
-      navigate("/dashboard");
+      const response = await walletAuth(address);
+
+      if (response.user) {
+        navigate(ROUTES.DASHBOARD);
+      }
     } catch {
       const errorMessage = "Wallet authentication failed";
       setApiError(errorMessage);

@@ -35,7 +35,10 @@ function App() {
             <Router>
               <AuthProvider>
                 <Routes>
-                  <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} />} />
+                  <Route
+                    path={ROUTES.HOME}
+                    element={<Navigate to={ROUTES.DASHBOARD} />}
+                  />
                   <Route
                     path={ROUTES.LOGIN}
                     element={
