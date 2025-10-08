@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { AuthProvider } from "../AuthContext";
@@ -62,7 +63,7 @@ describe("AuthContext", () => {
   });
 
   it("initializes with no user when no stored tokens", async () => {
-    vi.mocked(Cookies.get).mockReturnValue(undefined);
+    vi.mocked(Cookies).get.mockReturnValue(undefined as any);
     // Mock getMe to reject when no token (simulate 401)
     vi.mocked(authService).getMe.mockRejectedValue(new Error("No token"));
 
@@ -83,7 +84,7 @@ describe("AuthContext", () => {
   });
 
   it("loads user from stored tokens on initialization", async () => {
-    vi.mocked(Cookies).get.mockImplementation((key) => {
+    (vi.mocked(Cookies.get) as any).mockImplementation((key: string) => {
       if (key === "access_token") return "stored-access-token";
       if (key === "refresh_token") return "stored-refresh-token";
       return undefined;
@@ -199,7 +200,7 @@ describe("AuthContext", () => {
 
   it("handles logout successfully", async () => {
     // Start with authenticated state
-    vi.mocked(Cookies).get.mockImplementation((key: string) => {
+    (vi.mocked(Cookies.get) as any).mockImplementation((key: string) => {
       if (key === "access_token") return "stored-access-token";
       if (key === "refresh_token") return "stored-refresh-token";
       return undefined;
@@ -230,7 +231,7 @@ describe("AuthContext", () => {
   });
 
   it("handles user data refresh successfully", async () => {
-    vi.mocked(Cookies).get.mockImplementation((key: string) => {
+    (vi.mocked(Cookies.get) as any).mockImplementation((key: string) => {
       if (key === "access_token") return "stored-access-token";
       return undefined;
     });
