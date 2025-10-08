@@ -1,8 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { BrowserRouter } from "react-router-dom";
 import { LoginPage } from "../LoginPage";
 import { mockAuthContext, mockApiResponse } from "../../test/test-utils";
+import { AuthContext } from "../../contexts/AuthContext";
 
 // Mock the auth service
 vi.mock("../../services/authService", () => ({
@@ -56,18 +58,26 @@ describe("LoginPage", () => {
   const mockGoogleAuth = vi.fn();
   const mockWalletAuth = vi.fn();
 
+  const renderWithAuth = (authValue = mockAuthContext) => {
+    return render(
+      <BrowserRouter>
+        <AuthContext.Provider value={authValue}>
+          <LoginPage />
+        </AuthContext.Provider>
+      </BrowserRouter>
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("renders login form correctly", () => {
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     expect(screen.getByText("Sign in to your account")).toBeInTheDocument();
@@ -88,13 +98,11 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
     mockLogin.mockResolvedValue(mockApiResponse.login);
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Fill out form
@@ -112,13 +120,11 @@ describe("LoginPage", () => {
   it("displays validation errors for invalid form data", async () => {
     const user = userEvent.setup();
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Submit form without filling fields
@@ -136,13 +142,11 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
     mockLogin.mockRejectedValue(new Error("Any error"));
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Fill and submit form
@@ -159,13 +163,11 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
     mockGoogleAuth.mockResolvedValue(mockApiResponse.login);
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Click Google login button
@@ -180,13 +182,11 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
     mockWalletAuth.mockResolvedValue(mockApiResponse.login);
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Click wallet connect button
@@ -203,13 +203,11 @@ describe("LoginPage", () => {
       () => new Promise((resolve) => setTimeout(resolve, 1000))
     );
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Fill and submit form
@@ -226,13 +224,11 @@ describe("LoginPage", () => {
   it("validates email format", async () => {
     const user = userEvent.setup();
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Enter invalid email
@@ -246,13 +242,11 @@ describe("LoginPage", () => {
   it("validates password length", async () => {
     const user = userEvent.setup();
 
-    render(<LoginPage />, {
-      authValue: {
-        ...mockAuthContext,
-        login: mockLogin,
-        googleAuth: mockGoogleAuth,
-        walletAuth: mockWalletAuth,
-      },
+    renderWithAuth({
+      ...mockAuthContext,
+      login: mockLogin,
+      googleAuth: mockGoogleAuth,
+      walletAuth: mockWalletAuth,
     });
 
     // Enter short password
