@@ -199,14 +199,14 @@ describe("AuthContext", () => {
 
   it("handles logout successfully", async () => {
     // Start with authenticated state
-    vi.mocked(Cookies).get.mockImplementation((key) => {
+    vi.mocked(Cookies).get.mockImplementation((key: string) => {
       if (key === "access_token") return "stored-access-token";
       if (key === "refresh_token") return "stored-refresh-token";
       return undefined;
     });
     vi.mocked(authService).getMe.mockResolvedValue(mockUser);
-    vi.mocked(authService).logout.mockResolvedValue({ message: "Logged out" });
-    mockDisconnectAsync.mockResolvedValue();
+    vi.mocked(authService).logout.mockResolvedValue(undefined);
+    mockDisconnectAsync.mockResolvedValue(undefined);
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <AuthProvider>{children}</AuthProvider>
@@ -230,7 +230,7 @@ describe("AuthContext", () => {
   });
 
   it("handles user data refresh successfully", async () => {
-    vi.mocked(Cookies).get.mockImplementation((key) => {
+    vi.mocked(Cookies).get.mockImplementation((key: string) => {
       if (key === "access_token") return "stored-access-token";
       return undefined;
     });

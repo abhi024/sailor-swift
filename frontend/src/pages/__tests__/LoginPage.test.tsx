@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../test/test-utils";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginPage } from "../LoginPage";
 import { mockAuthContext, mockApiResponse } from "../../test/test-utils";
@@ -29,7 +29,7 @@ vi.mock("react-router-dom", async () => {
 
 // Mock Google OAuth
 vi.mock("@react-oauth/google", () => ({
-  GoogleLogin: ({ onSuccess, onError }: any) => (
+  GoogleLogin: ({ onSuccess }: any) => (
     <button
       data-testid="google-login-button"
       onClick={() => onSuccess({ credential: "mock-credential" })}
@@ -41,7 +41,7 @@ vi.mock("@react-oauth/google", () => ({
 
 // Mock WalletConnect
 vi.mock("../../components/WalletConnectButton", () => ({
-  WalletConnectButton: ({ onSuccess, onError }: any) => (
+  WalletConnectButton: ({ onSuccess }: any) => (
     <button
       data-testid="wallet-connect-button"
       onClick={() => onSuccess("0x123...abc")}
