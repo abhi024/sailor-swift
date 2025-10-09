@@ -2,6 +2,8 @@
 
 A modern full-stack authentication application built with React TypeScript, FastAPI, and PostgreSQL.
 
+[![Tests](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/test.yml/badge.svg)](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/test.yml)
+[![Docker Build](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/docker.yml/badge.svg)](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/docker.yml)
 [![Backend Tests](https://img.shields.io/badge/backend%20tests-38%20passed-brightgreen)](./backend/tests)
 [![Frontend Tests](https://img.shields.io/badge/frontend%20tests-48%20passed-brightgreen)](./frontend/src)
 [![E2E Tests](https://img.shields.io/badge/e2e%20tests-99%2F100%20passed-green)](./frontend/tests/e2e)
@@ -92,6 +94,7 @@ nano .env
 ```
 
 Required environment variables:
+
 ```env
 ENVIRONMENT=development
 JWT_SECRET_KEY=your-secret-key
@@ -129,12 +132,12 @@ Comprehensive testing suite covering backend, frontend, and end-to-end scenarios
 
 ### Test Coverage Summary
 
-| Test Suite | Tests | Status | Coverage |
-|------------|-------|--------|----------|
-| **Backend Unit Tests** | 38 | ✅ All Passing | 92% |
-| **Frontend Unit Tests** | 48 | ✅ All Passing | 100% |
-| **E2E Tests** | 99/100 | ✅ 99% Passing | - |
-| **Total** | **185/186** | **✅ 99.5%** | **92%** |
+| Test Suite              | Tests       | Status         | Coverage |
+| ----------------------- | ----------- | -------------- | -------- |
+| **Backend Unit Tests**  | 38          | ✅ All Passing | 92%      |
+| **Frontend Unit Tests** | 48          | ✅ All Passing | 100%     |
+| **E2E Tests**           | 99/100      | ✅ 99% Passing | -        |
+| **Total**               | **185/186** | **✅ 99.5%**   | **92%**  |
 
 ### Quick Test Commands
 
@@ -161,6 +164,7 @@ cd backend && open htmlcov/index.html
 ### What's Tested
 
 #### Backend (38 tests)
+
 - ✅ User signup and login flows
 - ✅ JWT token generation and validation
 - ✅ Password hashing and verification
@@ -170,6 +174,7 @@ cd backend && open htmlcov/index.html
 - ✅ User model and database operations
 
 #### Frontend (48 tests)
+
 - ✅ Authentication forms (login, signup)
 - ✅ UI components (Button, inputs, etc.)
 - ✅ Wallet connection component
@@ -179,6 +184,7 @@ cd backend && open htmlcov/index.html
 - ✅ Form validation
 
 #### E2E Tests (99/100 tests)
+
 - ✅ Complete authentication flows
 - ✅ Session persistence
 - ✅ Route protection
@@ -191,19 +197,20 @@ For detailed testing instructions and strategies, see [TESTING.md](./TESTING.md)
 
 ### Authentication
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST   | `/auth/signup` | Register new user |
-| POST   | `/auth/login`  | User login |
-| POST   | `/auth/google` | Google OAuth authentication |
-| POST   | `/auth/wallet` | Web3 wallet authentication |
-| POST   | `/auth/refresh` | Refresh access token |
-| POST   | `/auth/logout` | User logout |
-| GET    | `/auth/me`     | Get current user profile |
+| Method | Endpoint        | Description                 |
+| ------ | --------------- | --------------------------- |
+| POST   | `/auth/signup`  | Register new user           |
+| POST   | `/auth/login`   | User login                  |
+| POST   | `/auth/google`  | Google OAuth authentication |
+| POST   | `/auth/wallet`  | Web3 wallet authentication  |
+| POST   | `/auth/refresh` | Refresh access token        |
+| POST   | `/auth/logout`  | User logout                 |
+| GET    | `/auth/me`      | Get current user profile    |
 
 ### Example Requests
 
 **Signup:**
+
 ```bash
 curl -X POST http://localhost:8000/auth/signup \
   -H "Content-Type: application/json" \
@@ -217,6 +224,7 @@ curl -X POST http://localhost:8000/auth/signup \
 ```
 
 **Login:**
+
 ```bash
 curl -X POST http://localhost:8000/auth/login \
   -H "Content-Type: application/json" \
@@ -244,6 +252,7 @@ docker compose logs backend
 ### Database Management
 
 Connect to PostgreSQL using any database client:
+
 - **Host**: localhost
 - **Port**: 5432
 - **Database**: (from your .env)
@@ -270,6 +279,7 @@ docker compose exec database psql -U <username> -d <database>
 ## Technology Stack
 
 ### Backend
+
 - **FastAPI**: Modern Python web framework
 - **SQLAlchemy**: Database ORM
 - **Pydantic**: Data validation
@@ -278,6 +288,7 @@ docker compose exec database psql -U <username> -d <database>
 - **PostgreSQL**: Database
 
 ### Frontend
+
 - **React 19**: UI library
 - **TypeScript**: Type safety
 - **Vite**: Build tool
@@ -288,12 +299,14 @@ docker compose exec database psql -U <username> -d <database>
 - **Class Variance Authority**: Component variants
 
 ### Testing
+
 - **pytest**: Backend unit testing
 - **Vitest**: Frontend unit testing with React Testing Library
 - **Playwright**: End-to-end testing across multiple browsers
 - **React Testing Library**: Component testing utilities
 
 ### Infrastructure
+
 - **Docker**: Containerization
 - **Docker Compose**: Multi-service orchestration
 - **PostgreSQL**: Database persistence
@@ -304,6 +317,7 @@ docker compose exec database psql -U <username> -d <database>
 2. Create a feature branch
 3. Make your changes
 4. Run tests to ensure quality
+
    ```bash
    # Backend tests
    cd backend && python -m pytest
@@ -311,25 +325,26 @@ docker compose exec database psql -U <username> -d <database>
    # Frontend tests
    cd frontend && npm test
    ```
+
 5. Submit a pull request
 
 ## Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `ENVIRONMENT` | Application environment | Yes |
-| `JWT_SECRET_KEY` | JWT token signing key | Yes |
-| `POSTGRES_DB` | Database name | Yes |
-| `POSTGRES_USER` | Database username | Yes |
-| `POSTGRES_PASSWORD` | Database password | Yes |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID (backend) | No* |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth secret (backend) | No* |
-| `VITE_GOOGLE_CLIENT_ID` | Google OAuth client ID (frontend) | No* |
-| `VITE_API_URL` | Backend API URL | No** |
-| `WALLETCONNECT_PROJECT_ID` | WalletConnect project ID | No* |
+| Variable                   | Description                       | Required |
+| -------------------------- | --------------------------------- | -------- |
+| `ENVIRONMENT`              | Application environment           | Yes      |
+| `JWT_SECRET_KEY`           | JWT token signing key             | Yes      |
+| `POSTGRES_DB`              | Database name                     | Yes      |
+| `POSTGRES_USER`            | Database username                 | Yes      |
+| `POSTGRES_PASSWORD`        | Database password                 | Yes      |
+| `GOOGLE_CLIENT_ID`         | Google OAuth client ID (backend)  | No\*     |
+| `GOOGLE_CLIENT_SECRET`     | Google OAuth secret (backend)     | No\*     |
+| `VITE_GOOGLE_CLIENT_ID`    | Google OAuth client ID (frontend) | No\*     |
+| `VITE_API_URL`             | Backend API URL                   | No\*\*   |
+| `WALLETCONNECT_PROJECT_ID` | WalletConnect project ID          | No\*     |
 
-*Required for respective authentication methods
-**Defaults to http://localhost:8000
+\*Required for respective authentication methods
+\*\*Defaults to http://localhost:8000
 
 ## Security
 
