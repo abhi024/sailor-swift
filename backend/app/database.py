@@ -6,16 +6,20 @@ from .models.base import Base
 # Get environment configuration from .env file
 ENVIRONMENT = os.getenv("ENVIRONMENT")
 
-# Build DATABASE_URL from individual components
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
+# Check if DATABASE_URL is provided (for CI/CD or custom deployments)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Use 'database' hostname for Docker, can be overridden with DB_HOST
-DB_HOST = os.getenv("DB_HOST") or "database"  # docker-compose service name
-DB_PORT = os.getenv("DB_PORT") or "5432"
+# If DATABASE_URL not provided, build it from individual components
+if not DATABASE_URL:
+    POSTGRES_USER = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_DB = os.getenv("POSTGRES_DB")
 
-DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:{DB_PORT}/{POSTGRES_DB}"
+    # Use 'database' hostname for Docker, can be overridden with DB_HOST
+    DB_HOST = os.getenv("DB_HOST") or "database"  # docker-compose service name
+    DB_PORT = os.getenv("DB_PORT") or "5432"
+
+    DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:{DB_PORT}/{POSTGRES_DB}"
 
 # Create SQLAlchemy engine with environment-specific settings
 engine = create_engine(
