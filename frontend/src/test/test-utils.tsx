@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
+import React, { type ReactElement } from 'react'
+import { render, type RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider, AuthContext } from '../contexts/AuthContext'
+import { AuthContext } from '../contexts/AuthContext'
 import { vi } from 'vitest'
 
 // Mock user for testing
