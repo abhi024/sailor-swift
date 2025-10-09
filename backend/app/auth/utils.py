@@ -113,6 +113,11 @@ async def verify_google_token(credential: str) -> Optional[Dict]:
             if response.status_code == 200:
                 user_data = response.json()
 
+                # Verify required fields are present
+                if not user_data.get("sub") or not user_data.get("email"):
+                    print(f"Google token missing required fields: {user_data}")
+                    return None
+
                 # Verify the token is for our app
                 if user_data.get("aud") != GOOGLE_CLIENT_ID:
                     print(f"Token audience mismatch: {user_data.get('aud')} != {GOOGLE_CLIENT_ID}")
