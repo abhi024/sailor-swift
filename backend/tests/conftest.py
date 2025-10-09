@@ -14,8 +14,22 @@ from app.main import app
 from app.database import get_db, Base
 from app.models.user import User
 
-# Test database URL - using PostgreSQL for tests (same as production)
-SQLALCHEMY_DATABASE_URL = "postgresql://sailor_admin:abb6ec84ddc9c17c8612c9d84046ffaeb565f8a910640ddd@database:5432/sailor_swift_test_db"
+# Test database URL - respect DATABASE_URL from environment (for CI/CD)
+# or build from components for local testing
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not SQLALCHEMY_DATABASE_URL:
+    # Build from individual env vars for local Docker testing
+    POSTGRES_USER = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_DB = os.getenv("POSTGRES_DB")
+    DB_HOST = os.getenv("DB_HOST", "database")
+    DB_PORT = os.getenv("DB_PORT", "5432")
+
+    if not POSTGRES_USER or not POSTGRES_PASSWORD or not POSTGRES_DB:
+        raise ValueError("POSTGRES_USER, POSTGRES_PASSWORD, and POSTGRES_DB environment variables are required for tests")
+
+    SQLALCHEMY_DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:{DB_PORT}/{POSTGRES_DB}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
